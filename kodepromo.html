@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dapatkan Kode Promo BananaNova</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #fdfcf0;
+            color: #333;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 90%; max-width: 400px;
+            border: 2px solid #f1c40f;
+        }
+        .logo-placeholder { font-size: 50px; margin-bottom: 10px; }
+        h2 { color: #d35400; margin-bottom: 5px; }
+        p { font-size: 15px; color: #666; }
+        
+        .timer-box {
+            background: #fff9e6;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 1px dashed #f39c12;
+            min-height: 60px;
+        }
+
+        #btnDapatkan {
+            background: #f39c12;
+            color: white; border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        #displayKode {
+            display: none;
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+            letter-spacing: 3px;
+            padding: 10px;
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            margin-top: 15px;
+            background: #eafaf1;
+        }
+
+        .instruction { font-size: 12px; color: #999; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="logo-placeholder">🍌</div>
+    <h2>BananaNova Promo</h2>
+    
+    <div id="kontenTersedia">
+        <p>Coba keberuntungan anda untuk mendapatkan kode rahasia gratis banananova 100g!</p>
+        <div class="timer-box">
+            <div id="statusText">Ketuk tombol di bawah untuk memproses kode</div>
+            <div id="countdown" style="font-size: 30px; font-weight: bold; margin: 10px 0; display: none;">10</div>
+            <div id="displayKode">PROMOOKE</div>
+        </div>
+        <button id="btnDapatkan" onclick="mulaiProses()">Dapatkan Kode Sekarang</button>
+    </div>
+
+    <div id="linkKeKlaim" style="display: none; margin-top: 20px;">
+        <p>Gunakan kode Anda di halaman klaim:</p>
+        <a href="index.html" style="color: #d35400; font-weight: bold; text-decoration: none;">
+            Ke Halaman Klaim →
+        </a>
+    </div>
+
+    <p class="instruction">Pastikan Anda sudah membeli BananaNova sebelumnya (Online/Offline).</p>
+    <p style="color :red"><strong>note : ingat kode hanya bisa dilihat satu kali!!!</p></strong>
+</div>
+
+<script>
+    function mulaiProses() {
+        // 1. CEK DULU SAAT DIKLIK
+        if (localStorage.getItem("kodeDiambil")) {
+            // Jika sudah ada tanda, beri notifikasi alert
+            alert("MAAF! Anda sudah pernah mengambil kode promo sebelumnya di perangkat ini.");
+            
+            // Ubah tampilan secara instan agar mereka tidak bisa mencoba lagi
+            document.getElementById("statusText").innerHTML = "<b style='color:red;'>AKSES DITOLAK</b><br>Anda sudah mengambil jatah kode Anda.";
+            document.getElementById("btnDapatkan").style.display = "none";
+            document.getElementById("linkKeKlaim").style.display = "block";
+            return; // Hentikan fungsi di sini
+        }
+
+        // 2. JIKA BELUM PERNAH AMBIL, JALANKAN PROSES NORMAL
+        const btn = document.getElementById('btnDapatkan');
+        const countDisplay = document.getElementById('countdown');
+        const statusText = document.getElementById('statusText');
+        const displayKode = document.getElementById('displayKode');
+        const linkKeKlaim = document.getElementById('linkKeKlaim');
+        
+        btn.disabled = true;
+        btn.innerText = "Memproses...";
+        statusText.innerText = "Mohon tunggu sebentar...";
+        countDisplay.style.display = "block";
+
+        let waktu = 10;
+
+        const interval = setInterval(() => {
+            waktu--;
+            countDisplay.innerText = waktu;
+
+            if (waktu <= 0) {
+                clearInterval(interval);
+                countDisplay.style.display = "none";
+                
+                // SIMPAN TANDA PERMANEN SETELAH BERHASIL
+                localStorage.setItem("kodeDiambil", "true");
+
+                statusText.innerText = "BERHASIL! Inilah Kode Anda:";
+                displayKode.style.display = "block";
+                linkKeKlaim.style.display = "block";
+                btn.style.display = "none";
+            }
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
